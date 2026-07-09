@@ -8,10 +8,9 @@ import org.cat.user.clean.architecture.infrastructure.adapters.input.mapper.User
 import org.cat.user.clean.architecture.infrastructure.adapters.input.mapper.UserResponseMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 //El controlador se crea en el paquete de infraestructura en la seccion de adaptadores en el paqute de entrada/input por que un endpoit es algo que tu expones al cliente pero es interno de tu proyecto , y por que la base de datos tiene que estar en output es algo que esta alejado de mi proyecto , si elimino el proyecto la bd no pasa nada
 @RestController
@@ -37,5 +36,16 @@ public class UserController {
                 UserResponseMapper.INSTANCE.toUserResponse(user),
                 HttpStatus.CREATED
         );
+    }
+    //Ver que es un query path y un path path para pasar valores por get
+    @GetMapping
+    public ResponseEntity<List<UserResponse>> filterByLastName(@RequestParam String lastName){
+    List<User> users = userUsecase.filterByLastName(lastName);
+    List<UserResponse> userResponse = users.stream()
+            .map(UserResponseMapper.INSTANCE::toUserResponse)
+            .toList();
+        return ResponseEntity.ok(userResponse);
+
+
     }
 }

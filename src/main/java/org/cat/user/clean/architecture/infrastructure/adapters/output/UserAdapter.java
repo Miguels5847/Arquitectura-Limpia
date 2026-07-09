@@ -4,6 +4,9 @@ import org.cat.user.clean.architecture.application.ports.output.UserPort;
 import org.cat.user.clean.architecture.domain.model.User;
 import org.cat.user.clean.architecture.infrastructure.adapters.output.mapper.UserEntityMapper;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+
 //Por que no se pone @service , ni @repository , por que en springboot no hay anatoaciones para arquitectura limpia , el framework es independeiente de la arquitectura
 @Component
 
@@ -29,4 +32,14 @@ public class UserAdapter implements UserPort {
         );
         return UserEntityMapper.INSTANCE.toUser(userEntity);
     }
+
+    @Override
+    public List<User> findAll() {
+        List<UserEntity> userEntities = repository.findAll();
+        return userEntities.stream()
+                //eL METODO POR REFERENCIA ES ::toUser
+                .map(UserEntityMapper.INSTANCE::toUser)
+                .toList();
+    }
 }
+

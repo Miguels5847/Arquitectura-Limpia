@@ -8,12 +8,10 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface UserEntityMapper {
-    //Funciona de > Una fuente (la clase principal) y el destino (la clase que quiero instanciar)
-    //Aqui no usamos nada por que los atributods del origen y del destino tienen los mismos nombres
-    //Esto cuando tengo atributos distintos @Mapping(source = "fisrtName", target = "name")
-    //Esto es patron singleton
+
     UserEntityMapper INSTANCE = Mappers.getMapper(UserEntityMapper.class);
 
+    @Mapping(target = "id", ignore = true)
     UserEntity toUserEntity(User user);
 
     User toUser(UserEntity userEntity);
